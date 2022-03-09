@@ -17,7 +17,7 @@ jobs:
       - name: Configure Buildroot
         run: make -C buildroot BR2_EXTERNAL=../buildroot-external O=../output ${{ matrix.config }}
       - name: Build Buildroot
-        run: make -C buildroot BR2_EXTERNAL=../buildroot-external O=../output
+        run: make -C buildroot BR2_EXTERNAL=../buildroot-external O=../output -j32
       - name: Run legal-info
         run: make -C buildroot BR2_EXTERNAL=../buildroot-external O=../output legal-info
       - name: Compress sdcard.img
