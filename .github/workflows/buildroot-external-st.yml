@@ -14,6 +14,10 @@ jobs:
           repository: cvetaevvitaliy/buildroot
           ref: 2021.11.1-stm32mp1
           path: buildroot
+      - name: Check path
+        run: echo "PATH=$(pwd)"
+      - name: list
+        run: ls -l
       - name: Configure Buildroot
         run: make -C buildroot BR2_EXTERNAL=$(pwd) O=../output ${{ matrix.config }}
       - name: Build Buildroot
