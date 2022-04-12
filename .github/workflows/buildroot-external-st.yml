@@ -2,9 +2,6 @@ on: workflow_dispatch
 jobs:
   build-all:
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        config: [ st_stm32mp157a_sodimm2_mx_defconfig ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -19,11 +16,11 @@ jobs:
       - name: list
         run: ls -l
       - name: Configure Buildroot
-        run: make -C buildroot BR2_EXTERNAL=$(pwd) O=../output ${{ matrix.config }}
+        run: make -C buildroot BR2_EXTERNAL=$(pwd)/buildroot-external O=$(pwd)/output st_stm32mp157a_sodimm2_mx_defconfig
       - name: Build Buildroot
-        run: make -C buildroot BR2_EXTERNAL=$(pwd) O=../output uboot -j32
+        run: make -C buildroot BR2_EXTERNAL=$(pwd)/buildroot-external O=$(pwd)/output uboot -j32
       - name: Run legal-info
-        run: make -C buildroot BR2_EXTERNAL=$(pwd) O=../output legal-info
+        run: make -C buildroot BR2_EXTERNAL=$(pwd)/buildroot-external O=$(pwd)/output legal-info
       - name: Compress sdcard.img
         run: gzip -9 output/images/sdcard.img
       - name: Store images
