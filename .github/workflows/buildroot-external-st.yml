@@ -14,13 +14,16 @@ jobs:
       - name: Check path
         run: echo "PATH=$(pwd)"
       - name: list
-        run: ls -l && ls -l buildroot && ls -l buildroot-external
+        run: ls -l
       - name: Configure Buildroot
-        run: cd buildroot && make BR2_EXTERNAL=../buildroot-external st_stm32mp157a_sodimm2_mx_defconfig
+        working-directory: ./buildroot
+        run: ls -l && make BR2_EXTERNAL=../buildroot-external st_stm32mp157a_sodimm2_mx_defconfig
       - name: Build Buildroot
-        run: cd buildroot && make uboot -j32
+        working-directory: ./buildroot
+        run: make uboot -j32
       - name: Run legal-info
-        run: cd buildroot && make legal-info
+        working-directory: ./buildroot
+        run: make legal-info
       - name: Compress sdcard.img
         run: gzip -9 output/images/sdcard.img
       - name: Store images
