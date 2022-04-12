@@ -15,11 +15,11 @@ jobs:
           ref: 2021.11.1-stm32mp1
           path: buildroot
       - name: Configure Buildroot
-        run: make -C buildroot BR2_EXTERNAL=../buildroot-external O=../output ${{ matrix.config }}
+        run: make -C buildroot BR2_EXTERNAL=$(pwd) O=../output ${{ matrix.config }}
       - name: Build Buildroot
-        run: make -C buildroot BR2_EXTERNAL=../buildroot-external O=../output uboot -j32
+        run: make -C buildroot BR2_EXTERNAL=$(pwd) O=../output uboot -j32
       - name: Run legal-info
-        run: make -C buildroot BR2_EXTERNAL=../buildroot-external O=../output legal-info
+        run: make -C buildroot BR2_EXTERNAL=$(pwd) O=../output legal-info
       - name: Compress sdcard.img
         run: gzip -9 output/images/sdcard.img
       - name: Store images
