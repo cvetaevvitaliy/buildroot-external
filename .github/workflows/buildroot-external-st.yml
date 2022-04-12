@@ -20,14 +20,15 @@ jobs:
         run: ls -l && make BR2_EXTERNAL=../buildroot-external st_stm32mp157a_sodimm2_mx_defconfig
       - name: Build Buildroot
         working-directory: ./buildroot
-        run: make uboot -j32
+        run: make -j32
       - name: Run legal-info
         working-directory: ./buildroot
         run: make legal-info
       - name: Compress sdcard.img
+        working-directory: ./buildroot
         run: gzip -9 output/images/sdcard.img
       - name: Store images
         uses: actions/upload-artifact@v2
         with:
           name: image-${{ matrix.config }}
-          path: output/images/sdcard.img.gz
+          path: buildroot/output/images/sdcard.img.gz
