@@ -20,11 +20,11 @@ jobs:
       - name: Run legal-info
         working-directory: ./buildroot
         run: make legal-info
-      - name: Compress sdcard.img
+      - name: Compress artifacts
         working-directory: ./buildroot
-        run: gzip -9 output/images/sdcard.img
+        run: tar -czvf output/images/artifacts.tar.gz output/images/sdcard.img output/images/tf-a-stm32mp157a-sodimm2-mx.stm32 output/images/fip.bin ../buildroot-external/emmc-flash.tsv
       - name: Store images
         uses: actions/upload-artifact@v2
         with:
-          name: image-st_stm32mp157a_sodimm2_mx_defconfig
-          path: buildroot/output/images/sdcard.img.gz
+          name: artifacts
+          path: buildroot/output/images/artifacts.tar.gz
