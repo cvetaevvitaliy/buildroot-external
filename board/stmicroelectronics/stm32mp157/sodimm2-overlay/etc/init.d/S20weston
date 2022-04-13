@@ -29,6 +29,9 @@ done
 
 case "$1" in
   start)
+  	if [ -x "$(command -v psplash-write)" ]; then
+        /usr/bin/psplash-write "PROGRESS 100"
+	fi
         . /etc/profile
 	export LANG=en_US.UTF-8
 	export XDG_RUNTIME_DIR=/var/run/weston
