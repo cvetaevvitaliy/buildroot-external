@@ -1,4 +1,8 @@
-on: workflow_dispatch
+
+name: build buildroot
+
+# Triggers the workflow on push or pull request events
+on: [push, pull_request]
 jobs:
   build-buildroot:
     runs-on: ubuntu-20.04
@@ -6,25 +10,32 @@ jobs:
       - uses: actions/checkout@v2
         with:
           path: buildroot-external
+      
       - uses: actions/checkout@v2
         with:
           repository: cvetaevvitaliy/buildroot
           ref: 2021.11.1-stm32mp1
           path: buildroot
+      
       - name: Configure Buildroot
         working-directory: ./buildroot
-        run: ls -l && make BR2_EXTERNAL=../buildroot-external st_stm32mp157a_sodimm2_mx_defconfig
+        run: make BR2_EXTERNAL=../buildroot-external st_stm32mp157a_sodimm2_mx_defconfig
+      
       - name: Build Buildroot
         working-directory: ./buildroot
         run: make -j32
+      
       - name: Run legal-info
         working-directory: ./buildroot
         run: make legal-info
-      - name: Compress artifacts
-        working-directory: ./buildroot
-        run: tar -czvf output/images/artifacts.tar.gz output/images/sdcard.img output/images/tf-a-stm32mp157a-sodimm2-mx.stm32 output/images/fip.bin ../buildroot-external/emmc-flash.tsv
+      
+      #- name: Compress artifacts
+      #  working-directory: ./buildroot
+      #  run: tar -czvf output/images/artifacts.tar.gz output/images/sdcard.img output/images/tf-a-stm32mp157a-sodimm2-mx.stm32 output/images/fip.bin ../buildroot-external/emmc-flash.tsv
+     
       - name: Store images
         uses: actions/upload-artifact@v2
         with:
-          name: artifacts
-          path: buildroot/output/images/artifacts.tar.gz
+          name: firmware-artifacts
+          # path: buildroot/output/images/artifacts.tar.gz
+          path: buildroot/output/images/sdcard.img buildroot/output/images/tf-a-stm32mp157a-sodimm2-mx.stm32 buildroot/output/images/fip.bin buildroot-external/emmc-flash.tsv
