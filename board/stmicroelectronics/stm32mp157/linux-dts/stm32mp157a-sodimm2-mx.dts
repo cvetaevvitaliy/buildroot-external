@@ -150,10 +150,7 @@
 	};
 
 	lcd0: display {
-		compatible = "ampire,am800480r3tmqwa1h", "panel-dpi";
-		//compatible = "bananapi,s070wv20-ct16", "panel-dpi";
-		//compatible = "panel-dpi";
-		//compatible = "startek,startek-kd050c", "panel-dpi";
+		compatible = "out4,o4-lcd5-800-480", "panel-dpi";
 		label = "display";
 		power-supply = <&reg_3v3_rgb>;
 		backlight = <&rgb_panel_backlight>;
