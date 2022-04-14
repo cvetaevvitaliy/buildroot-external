@@ -7,6 +7,9 @@ jobs:
   build-buildroot:
     runs-on: ubuntu-20.04
     steps:
+      - name: Install depends
+        run: sudo apt-get install libwayland-dev
+        
       - uses: actions/checkout@v2
         with:
           path: buildroot-external
