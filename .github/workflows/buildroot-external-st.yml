@@ -46,4 +46,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: firmware-artifacts
-          path: ./buildroot/output/images/sdcard.img ./buildroot/output/images/tf-a-stm32mp157a-sodimm2-mx.stm32 ./buildroot/output/images/fip.bin ./buildroot-external/emmc-flash.tsv
+          path: ${{runner.workspace}}/buildroot-external/buildroot/output/images/sdcard.img ${{runner.workspace}}/buildroot-external/buildroot/output/images/tf-a-stm32mp157a-sodimm2-mx.stm32 ${{runner.workspace}}/buildroot-external/buildroot/output/images/fip.bin ${{runner.workspace}}/buildroot-external/emmc-flash.tsv
