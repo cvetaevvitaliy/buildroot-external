@@ -6,9 +6,7 @@ jobs:
   build-buildroot:
     runs-on: self-hosted
     steps:
-      - name: Install depends
-        run: sudo apt-get install libwayland-dev
-        
+      
       - uses: actions/checkout@v2
         with:
           path: buildroot-external
