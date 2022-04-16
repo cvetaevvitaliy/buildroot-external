@@ -1,0 +1,77 @@
+name: build buildroot
+
+# Triggers the workflow on push or pull request events
+on: [ workflow_dispatch, pull_request ]
+jobs:
+  build-buildroot:
+    runs-on: self-hosted
+    steps:
+      - name: Install depends
+        run: sudo apt-get install libwayland-dev
+        
+      - uses: actions/checkout@v2
+        with:
+          path: buildroot-external
+      
+      - uses: actions/checkout@v2
+        with:
+          repository: cvetaevvitaliy/buildroot
+          ref: 2021.11.1-stm32mp1
+          path: buildroot
+      
+      - name: Configure Buildroot
+        working-directory: ./buildroot
+        run: make BR2_EXTERNAL=../buildroot-external st_stm32mp157a_sodimm2_mx_defconfig
+      
+      - name: Build Buildroot
+        working-directory: ./buildroot
+        run: make -j32
+      
+      - name: Run legal-info
+        working-directory: ./buildroot
+        run: make legal-info
+        
+      - name: Create SDK 
+        working-directory: ./buildroot
+        run: make sdk
+        
+      #- name: Compress artifacts
+      #  working-directory: ./buildroot
+      #  run: tar -czvf output/images/artifacts.tar.gz output/images/sdcard.img output/images/tf-a-stm32mp157a-sodimm2-mx.stm32 output/images/fip.bin ../buildroot-external/emmc-flash.tsv
+
+      #- name: Store images
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    name: firmware-artifacts
+      #    path: buildroot/output/images/artifacts.tar.gz
+
+      # - name: Store images
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    name: firmware-artifacts
+      #    path: ${{runner.workspace}}/buildroot-external/buildroot/output/images/sdcard.img ${{runner.workspace}}/buildroot-external/buildroot/output/images/tf-a-stm32mp157a-sodimm2-mx.stm32 ${{runner.workspace}}/buildroot-external/buildroot/output/images/fip.bin ${{runner.workspace}}/buildroot-external/emmc-flash.tsv
+      
+      - name: Copy artifacts
+        working-directory: ./buildroot
+        run: | 
+          mkdir ~/artifacts
+          cp -v output/images/sdcard.img ~/artifacts
+          cp -v output/images/tf-a-stm32mp157a-sodimm2-mx.stm32 ~/artifacts
+          cp -v output/images/fip.bin ~/artifacts
+          cp -v ../buildroot-external/emmc-flash.tsv ~/artifacts
+          mkdir ~/sdk
+          cp -v output/images/*sdk*.tar.gz ~/sdk
+      
+      - name: Upload Artifact GitHub Action
+        uses: actions/upload-artifact@v2
+        with: 
+          name: download-artifacts
+          path: ~/artifacts
+          
+      - name: Upload SDK GitHub Action
+        uses: actions/upload-artifact@v2
+        with: 
+          name: download-sdk
+          path: ~/sdk
+        
+        
