@@ -1,0 +1,31 @@
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 9e9b8933e5..27a66f3c6b 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -337,6 +337,11 @@ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
+ comment "scheduling utilities need a toolchain w/ headers >= 3.14"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 
++config BR2_PACKAGE_UTIL_LINUX_SFDISK
++	bool "sfdisk"
++	help
++	  Partition table manipulator for Linux
++
+ config BR2_PACKAGE_UTIL_LINUX_SETPRIV
+ 	bool "setpriv"
+ 	select BR2_PACKAGE_LIBCAP_NG
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index cf0fee409b..14d38110ae 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -179,7 +179,8 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WDCTL),--enable-wdctl,--disable-wdctl) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WIPEFS),--enable-wipefs,--disable-wipefs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
++	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_SFDISK),--enable-sfdisk,--disable-sfdisk)
+ 
+ # In the host version of util-linux, we only require libuuid and
+ # libmount (plus libblkid as an indirect dependency of libmount).
+
