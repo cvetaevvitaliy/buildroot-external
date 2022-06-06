@@ -1,0 +1,5 @@
+
+# Export env variable from file ~/.bashrc
+if [ -e  /root/.bashrc ]; then
+	source /root/.bashrc
+fi	

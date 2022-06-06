@@ -1,0 +1,44 @@
+#! /bin/sh
+
+case "$1" in
+  start)
+
+    echo "Expanding the root partition..."
+    if [ -x "$(command -v psplash-write)" ]; then
+      /usr/bin/psplash-write "MSG RESIZING PARTITION"
+      /usr/bin/psplash-write "PROGRESS 0"
+    fi
+    
+    sleep 2
+    
+    growpart /dev/mmcblk0 4
+    
+    if [ -x "$(command -v psplash-write)" ]; then
+      /usr/bin/psplash-write "PROGRESS 50"
+    fi
+    
+    resize2fs /dev/mmcblk0p4
+    df -h
+    
+    mv /etc/init.d/S15resize_rootpart /etc/init.d/done.S15resize_rootpart
+    
+    if [ -x "$(command -v psplash-write)" ]; then
+      /usr/bin/psplash-write "MSG RESIZING PARTITION - DONE"
+      /usr/bin/psplash-write "PROGRESS 100"
+      sleep 2
+    fi
+    echo "Done."
+    echo "Reboot now."
+    if [ -x "$(command -v psplash-write)" ]; then
+      /usr/bin/psplash-write "MSG REBOOT"
+      /usr/bin/psplash-write "PROGRESS 100"
+      sleep 2
+    fi
+    
+    reboot -f
+    ;;
+  *)
+    echo "Usage: $0 {start}" >&2
+    exit 1
+    ;;
+esac

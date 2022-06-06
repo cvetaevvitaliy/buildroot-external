@@ -1,1 +1,3 @@
 source "$BR2_EXTERNAL_ST_PATH/package/m4projects/Config.in"
+source "$BR2_EXTERNAL_ST_PATH/package/sfdisk/Config.in"
+source "$BR2_EXTERNAL_ST_PATH/package/QLauncher/Config.in"

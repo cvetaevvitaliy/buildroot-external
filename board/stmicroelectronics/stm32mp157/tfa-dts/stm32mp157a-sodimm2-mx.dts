@@ -233,10 +233,9 @@
 		/*STM32CubeMX generates a basic and standard configuration for ETZPC.
 		Additional device configurations can be added here if needed.
 		"etzpc" node could be also overloaded in "addons" User-Section.*/
-	
+
 	DECPROT(STM32MP1_ETZPC_BKPSRAM_ID, DECPROT_S_RW, DECPROT_UNLOCK)
 
-	
 	/* USER CODE END etzpc_decprot */
 	>;
 
@@ -646,10 +645,18 @@
 		reg = <2>;
 		cfg = < 1 49 2 5 36 PQR(1,1,0) >;
 	};
+/*
 	pll4:st,pll@3 {
 		compatible = "st,stm32mp1-pll";
 		reg = <3>;
-		cfg = < 3 98 5 17 7 PQR(1,1,0) >;
+		cfg = < 3 98 5 17 7 PQR(1,1,0) >; // 27
+	};
+*/
+	pll4:st,pll@3 {
+		compatible = "st,stm32mp1-pll";
+		reg = <3>;
+		cfg = < 1 36 3 14 3 PQR(1,1,0) >;
+		frac = < 0x400 >;
 	};
 
 	/* USER CODE BEGIN rcc */

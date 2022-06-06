@@ -680,9 +680,9 @@ static const struct panel_desc ampire_am_1280800n3tzqw_t00h = {
 		.width = 217,
 		.height = 136,
 	},
-	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
+	.bus_flags = DRM_BUS_FLAG_DE_HIGH,
+	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
-	.bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE,
 };
 
 static const struct drm_display_mode ampire_am_480272h3tmqw_t01h_mode = {
@@ -3933,6 +3933,47 @@ static const struct panel_desc o4_lcd5_800_480 = {
 		.width = 100,
 		.height = 68,
 	},
+	.bus_flags = DRM_BUS_FLAG_DE_HIGH,
+	.connector_type = DRM_MODE_CONNECTOR_DPI,
+	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
+};
+
+static const struct drm_display_mode wave_7inch_1024_600_mode = {
+
+	// .clock = 29700,
+	// .hdisplay = 1024,
+	// .hsync_start = 1024 + 160,
+	// .hsync_end = 1024 + 160 + 20,
+	// .htotal = 1024 + 160 + 20 + 140,
+	// .vdisplay = 600,
+	// .vsync_start = 600 + 12,
+	// .vsync_end = 600 + 12 + 3,
+	// .vtotal = 600 + 12 + 3 + 20,
+
+	.clock = 51200,
+	.hdisplay = 1024,
+	.hsync_start = 1024 + 160,
+	.hsync_end = 1024 + 160 + 20,
+	.htotal = 1024 + 160 + 20 + 140,
+	.vdisplay = 600,
+	.vsync_start = 600 + 12,
+	.vsync_end = 600 + 12 + 3,
+	.vtotal = 600 + 12 + 3 + 200,
+
+	.flags = DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC,
+};
+
+static const struct panel_desc wave_7inch_1024_600 = {
+	.modes = &wave_7inch_1024_600_mode,
+	.num_modes = 1,
+	.bpc = 6,
+	.size = {
+		.width = 155,
+		.height = 88,
+	},
+	.bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE,
+	.connector_type = DRM_MODE_CONNECTOR_DPI,
+	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
 };
 
 static const struct of_device_id platform_of_match[] = {
@@ -4339,6 +4380,9 @@ static const struct of_device_id platform_of_match[] = {
 		.compatible = "out4,o4-lcd5-800-480",
 		.data = &o4_lcd5_800_480,
 	}, {
+		.compatible = "waveshare,lcd7inch-1024-600",
+		.data = &wave_7inch_1024_600,
+	}, {	
 		/* Must be the last entry */
 		.compatible = "panel-dpi",
 		.data = &panel_dpi,

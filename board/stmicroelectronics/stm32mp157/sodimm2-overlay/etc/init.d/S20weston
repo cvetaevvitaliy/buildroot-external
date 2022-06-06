@@ -30,15 +30,18 @@ done
 case "$1" in
   start)
   	if [ -x "$(command -v psplash-write)" ]; then
-        /usr/bin/psplash-write "PROGRESS 100"
+  		/usr/bin/psplash-write "MSG START WESTON"
+        	/usr/bin/psplash-write "PROGRESS 100"
 	fi
         . /etc/profile
 	export LANG=en_US.UTF-8
 	export XDG_RUNTIME_DIR=/var/run/weston
+	mkdir -p /var/run/weston
+	chmod -R 0700 /var/run/weston
 	mkdir --parents $XDG_RUNTIME_DIR
 	
 
-        weston --tty=2 --log=/tmp/weston.log --idle-time=0&
+        weston --tty=2 --log=/tmp/weston.log --debug --idle-time=0&
   ;;
 
   stop)

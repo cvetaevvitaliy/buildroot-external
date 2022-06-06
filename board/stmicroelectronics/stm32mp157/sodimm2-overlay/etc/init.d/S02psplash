@@ -9,6 +9,8 @@ test -x $DAEMON || exit 0
 case "$1" in
   start)
     $DAEMON > /dev/null 2>&1 &
+    /usr/bin/psplash-write "MSG START SYSTEM"
+    /usr/bin/psplash-write "PROGRESS 10"
     ;;
   stop)
     killall -q $NAME

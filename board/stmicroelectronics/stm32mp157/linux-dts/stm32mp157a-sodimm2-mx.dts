@@ -98,11 +98,10 @@
 		ethernet0 = &ethernet0;
 		spi0 = &qspi;
 		display0 = &lcd0;
-		
 		//serial1 = &usart3;
 	};
 
-		reg_5v_host: reg-5v-host {
+	reg_5v_host: reg-5v-host {
 		compatible = "regulator-fixed";
 		regulator-name = "5v-host";
 		regulator-min-microvolt = <5000000>;
@@ -115,7 +114,7 @@
 		default-on;
 		status = "okay";
 	};
-	
+
 	reg_5v_otg: reg-5v-otg {
 		compatible = "regulator-fixed";
 		regulator-name = "5v-otg";
@@ -129,7 +128,7 @@
 		default-on;
 		status = "okay";
 	};
-	
+
 	reg_3v3_rgb: regulator-3v3-rgb {
 		compatible = "regulator-fixed";
 		regulator-name = "3v3-rgb";
@@ -139,7 +138,7 @@
 		enable-active-high;
 		status = "okay";
 	};
-	
+
 	rgb_panel_backlight: rgb-panel-backlight {
 		compatible = "gpio-backlight";
 		gpios = <&gpioa 15 GPIO_ACTIVE_HIGH>;
@@ -149,14 +148,27 @@
 		status = "okay";
 	};
 
+
+	// lcd_backlight: lcd-backlight {
+	// 	compatible = "pwm-backlight";
+	// 	linux,default-trigger = "backlight";
+	// 	enable-active-high;
+	// 	default-off;
+	// 	pwms = <&backlight_pwm 0 100000 0>;
+	// 	brightness-levels = <0 31 63 95 127 159 191 223 255>;
+	// 	default-brightness-level = <7>;
+	// 	power-supply = <&reg_3v3_rgb>; /* 3V3_BACKLIGHT */
+	// 	status = "okay";
+	// };
+
+
 	lcd0: display {
-		compatible = "out4,o4-lcd5-800-480", "panel-dpi";
+		//compatible = "out4,o4-lcd5-800-480", "panel-dpi";
+		compatible =  "waveshare,lcd7inch-1024-600", "panel-dpi";
 		label = "display";
 		power-supply = <&reg_3v3_rgb>;
 		backlight = <&rgb_panel_backlight>;
-		//bits-per-pixel = <32>;
-		//bus-width = <24>;
-		//connector-type = <17>;
+		//backlight = <&lcd_backlight>;
 
 		status = "okay";
 
@@ -165,88 +177,24 @@
 			remote-endpoint = <&ltdc_ep0_out>;
 			};
 		};
-
-		// panel-timing {
-		// 	clock-frequency = <33000000>;
-		// 	hactive = <800>;
-		// 	vactive = <480>;
-		// 	hfront-porch = <40>;
-		// 	hback-porch = <40>;
-		// 	hsync-len = <43>;
-		// 	vback-porch = <29>;
-		// 	vfront-porch = <13>;
-		// 	vsync-len = <3>;
-		// 	hsync-active = <0>;
-		// 	vsync-active = <0>;
-		// 	de-active = <1>;
-		// 	pixelclk-active = <1>;
-		// };
-
 	};
-	
-	// panel_rgb: panel-rgb {
-	// 	//compatible = "okaya,rs800480t-7x0gp";
-	// 	compatible = "ampire,am800480r3tmqwa1h";
-	// 	//compatible = "simple-panel";
-	// 	power-supply = <&reg_3v3_rgb>;
-	// 	backlight = <&rgb_panel_backlight>;
-	// 	//pinctrl-names = "default", "sleep";
-	// 	//pinctrl-0 = <&ltdc_pins_mx>;
-	// 	//pinctrl-1 = <&ltdc_sleep_pins_mx>;
-	// 	status = "okay";
-	// 	bits-per-pixel = <32>;
-	// 	bus-width = <24>;
-	// 	connector_type = <17>;
-		
-	// 	port {
-	// 		dsi_in: endpoint {
-	// 		remote-endpoint = <&ltdc_ep0_out>;
-	// 		};
-	// 	};
-		
-		
-	// 	display-timings {
-    //         		native-mode = <&timing0>;
-    //         		timing0: timing0 {
-    //             		clock-frequency = <30000000>;
-    //             		hactive = <800>;
-	// 					vactive = <480>;
-	// 					hfront-porch = <40>;
-	// 					hback-porch = <88>;
-	// 					hsync-len = <48>;
-	// 					vback-porch = <32>;
-	// 					vfront-porch = <13>;
-	// 					vsync-len = <3>;
-	// 					hsync-active = <0>;
-	// 					vsync-active = <0>;
-	// 					de-active = <1>;
-	// 					pixelclk-active = <0>;
-    //         		};
-    //     	};
-        	
-	// };
-	
+
 	led {
 		compatible = "gpio-leds";
 		status = "okay";
-//		red1 {
-//			label = "heartbeat";
-//			gpios = <&pcf8574a 0 GPIO_ACTIVE_LOW>;
-//			linux,default-trigger = "heartbeat";
-//			default-state = "on";
-//		};
-		
-		green1 {
+
+		// for test external i2c GPIO expander
+		led1 {
 			label = "heartbeat";
-			gpios = <&pcf8574a 3 GPIO_ACTIVE_LOW>;
+			gpios = <&pcf8574a 0 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "heartbeat";
-			default-state = "on";
+			default-state = "off";
 		};
-		
-		green2 {
+
+		// for test external i2c GPIO expander
+		led2 {
 			label = "network";
-			gpios = <&pcf8574a 7 GPIO_ACTIVE_LOW>;
-			linux,default-trigger = "netdev";
+			gpios = <&pcf8574a 1 GPIO_ACTIVE_LOW>;
 			default-state = "off";
 		};
 	};
@@ -470,7 +418,7 @@
 
 	ltdc_pins_mx: ltdc_mx-0 {
 		pins1 {
-			pinmux = <STM32_PINMUX('C', 6, AF14)>, /* LTDC_HSYNC */
+			pinmux = <STM32_PINMUX('I', 12, AF14)>, /* LTDC_HSYNC */
 					 <STM32_PINMUX('I', 13, AF14)>, /* LTDC_VSYNC */
 					 <STM32_PINMUX('I', 15, AF14)>, /* LTDC_R0 */
 					 <STM32_PINMUX('J', 0, AF14)>, /* LTDC_R1 */
@@ -511,7 +459,7 @@
 
 	ltdc_sleep_pins_mx: ltdc_sleep_mx-0 {
 		pins {
-			pinmux = <STM32_PINMUX('C', 6, ANALOG)>, /* LTDC_HSYNC */
+			pinmux = <STM32_PINMUX('I', 12, ANALOG)>, /* LTDC_HSYNC */
 					 <STM32_PINMUX('I', 13, ANALOG)>, /* LTDC_VSYNC */
 					 <STM32_PINMUX('I', 14, ANALOG)>, /* LTDC_CLK */
 					 <STM32_PINMUX('I', 15, ANALOG)>, /* LTDC_R0 */
@@ -794,7 +742,7 @@
 			output-low;
 		};
 	};
-	
+
 	usb_otg_5v_power_pins_mx: usb_otg_5v_power_mx-0 {
 		u-boot,dm-pre-reloc;
 		pins {
@@ -814,7 +762,22 @@
 			output-low;
 		};
 	};
-	
+
+	pwm2_pins_a: pwm2-0 {
+		pins {
+			pinmux = <STM32_PINMUX('A', 15, AF1)>; /* TIM2_CH1 */
+			bias-pull-down;
+			drive-push-pull;
+			slew-rate = <0>;
+		};
+	};
+
+	pwm2_sleep_pins_a: pwm2-sleep-0 {
+		pins {
+			pinmux = <STM32_PINMUX('A', 15, ANALOG)>; /* TIM2_CH1 */
+		};
+	};
+
 	/* USER CODE END pinctrl */
 };
 
@@ -886,10 +849,11 @@
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&dcmi_pins_mx>;
 	pinctrl-1 = <&dcmi_sleep_pins_mx>;
-	status = "okay";
+	status = "disabled";
 
 	/* USER CODE BEGIN dcmi */
 
+	/*
 	port{
 
 		dcmi_0:endpoint{
@@ -902,6 +866,7 @@
 			pclk-max-frequency = <77000000>;
 		};
 	};
+	*/
 	/* USER CODE END dcmi */
 };
 
@@ -998,7 +963,7 @@
 	/delete-property/ dmas;
 	/delete-property/ dma-names;
 
-
+	/*
 	ov5640:camera@3c{
 		compatible = "ovti,ov5640";
 		reg = <0x3c>;
@@ -1023,6 +988,7 @@
 			};
 		};
 	};
+	*/
 
 	stmfx:stmfx@42{
 		compatible = "st,stmfx-0300";
@@ -1071,7 +1037,7 @@
 		panel = <&lcd0>;
 		status = "okay";
 	};
-	
+
 	pcf8574a: gpio@38 {
 		compatible = "nxp,pcf8574a";
 		reg = <0x38>;
@@ -1080,7 +1046,7 @@
 		lines-initial-states = <0>;
 		status = "okay";
 	};
-	
+
 	pcf8574a_ext: gpio@3f {
 		compatible = "nxp,pcf8574a";
 		reg = <0x3f>;
@@ -1089,9 +1055,6 @@
 		lines-initial-states = <0>;
 		status = "okay";
 	};
-
-
-	
 	/* USER CODE END i2c2 */
 };
 
@@ -1352,18 +1315,9 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 
-	flash0:mx66l51235l@0{
+	flash0: mx25l25645g@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		spi-rx-bus-width = <4>;
-		spi-max-frequency = <108000000>;
-		#address-cells = <1>;
-		#size-cells = <1>;
-	};
-
-	flash1:mx66l51235l@1{
-		compatible = "jedec,spi-nor";
-		reg = <1>;
 		spi-rx-bus-width = <4>;
 		spi-max-frequency = <108000000>;
 		#address-cells = <1>;
@@ -1422,7 +1376,7 @@
 	non-removable;
 	no-sd;
 	no-sdio;
-	st,neg-edge;	
+	st,neg-edge;
 	bus-width = <8>;
 	vmmc-supply = <&v3v3>;
 	vqmmc-supply = <&vdd>;
@@ -1469,7 +1423,7 @@
 	/* USER CODE BEGIN usbh_ehci */
 	phys = <&usbphyc_port0>;
 	phy-names = "usb";
-    	vbus-supply = <&reg_5v_host>;
+	vbus-supply = <&reg_5v_host>;
 	/* USER CODE END usbh_ehci */
 };
 
@@ -1556,5 +1510,33 @@
 	phy-names = "usb";
 	vbus-supply = <&vbus_sw>;
 };
-/* USER CODE END addons */
 
+&dts{
+	compatible = "st,stm32-thermal";
+	reg = <0x50028000 0x100>;
+	clocks = <&rcc TMPSENS>;
+	clock-names = "pclk";
+	#thermal-sensor-cells = <0>;
+	interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
+	status = "okay";
+};
+
+
+&timers2 {
+	/delete-property/dmas;
+	/delete-property/dma-names;
+	status = "okay";
+
+	backlight_pwm: pwm {
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&pwm2_pins_a>;
+		pinctrl-1 = <&pwm2_sleep_pins_a>;
+		status = "okay";
+	};
+
+	timer@1 {
+		status = "okay";
+	};
+};
+
+/* USER CODE END addons */
