@@ -13,18 +13,23 @@ case "$1" in
     
     growpart /dev/mmcblk0 4
     
+    sleep 10
+    
     if [ -x "$(command -v psplash-write)" ]; then
+      /usr/bin/psplash-write "MSG RESIZING PARTITION ..."
       /usr/bin/psplash-write "PROGRESS 50"
     fi
     
     resize2fs /dev/mmcblk0p4
+    
+    sleep 2
     df -h
     
     mv /etc/init.d/S15resize_rootpart /etc/init.d/done.S15resize_rootpart
     
     if [ -x "$(command -v psplash-write)" ]; then
       /usr/bin/psplash-write "MSG RESIZING PARTITION - DONE"
-      /usr/bin/psplash-write "PROGRESS 100"
+      /usr/bin/psplash-write "PROGRESS 99"
       sleep 2
     fi
     echo "Done."
