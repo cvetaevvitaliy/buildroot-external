@@ -5,13 +5,13 @@
 ################################################################################
 
 QLAUNCHER_VERSION = 1.0
-QLAUNCHER_SITE = $(BR2_EXTERNAL_ST_PATH)/package/app/QLauncher
+QLAUNCHER_SITE = $(BR2_EXTERNAL_ST_PATH)/app/QLauncher
 QLAUNCHER_SITE_METHOD = local
 QLAUNCHER_DEPENDENCIES = weston qt5base qt5wayland
 
 define QLAUNCHER_CONFIGURE_CMDS
 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-	#$(HOST_DIR)/usr/bin/qmake -o Makefile -v $(@D)/QLauncher.pro
+	$(HOST_DIR)/usr/bin/qmake -o Makefile -v $(@D)/QLauncher.pro
 endef
 
 define QLAUNCHER_BUILD_CMDS
